@@ -93,6 +93,7 @@ useEffect(() => {
                   style={{
                     ...styles.form,
                     marginBottom: isShowKeyboard ? 130 : 66,
+                    
                   }}
                 >
                   <TextInput

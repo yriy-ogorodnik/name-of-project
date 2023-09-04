@@ -1,7 +1,8 @@
-import React, {  useEffect, useState } from "react";
-import { useFonts } from 'expo-font';
+import { useNavigation } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
 
-import { Dimensions,
+import {
+  Dimensions,
   ImageBackground,
   Image,
   TextInput,
@@ -14,77 +15,64 @@ import { Dimensions,
   TouchableWithoutFeedback,
   Keyboard,
   Platform,
-  Alert,
+  Alert,Button,
 } from "react-native";
 const initialState = {
-  login:'',
-  email: '',
-  password:''
-} 
-const windowDimensions = Dimensions.get('window').width;
-
+  login: "",
+  email: "",
+  password: "",
+};
+const windowDimensions = Dimensions.get("window").width;
 
 export default function LoginScreen() {
+  const navigation = useNavigation();
 
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
-  console.log("RegistrationScreen  isShowKeyboard:", isShowKeyboard)
+  console.log("RegistrationScreen  isShowKeyboard:", isShowKeyboard);
   const [state, setState] = useState(initialState);
-  // fonts______________________________
-  const [fontsLoaded, fontError] = useFonts({
-    'Inter-Black': require('../fonts/Inter-Black.ttf'),
-    'Roboto-regular': require('../fonts/Roboto-Regular.ttf'),
-    'Roboto-medium': require('../fonts/Roboto-Medium.ttf'),
+
+  // ________________________
+  const [dimensions, setDimensions] = useState({
+    window: windowDimensions,
   });
- 
-  
-// ________________________
-const [dimensions, setDimensions] = useState({
-  window: windowDimensions,
-});
 
-
-useEffect(() => {
-  const subscription = Dimensions.addEventListener(
-    'change',
-    (window) => {
+  useEffect(() => {
+    const subscription = Dimensions.addEventListener("change", window => {
       setDimensions(window);
-    },
-  );
-  return () => subscription?.remove();
-});
-// ____________________________
+    });
+    return () => subscription?.remove();
+  });
+  // ____________________________
   const onRegister = () => {
-    if (!state.login || !state.email|| !state.password){
+    if (!state.login || !state.email || !state.password) {
       Alert.alert("Fill in all the fields!");
       return;
     }
-    
+
     setIsShowKeyboard(false);
     Keyboard.dismiss();
-    console.log('state', state)
-    setState(initialState)
+    console.log("state", state);
+    setState(initialState);
   };
   const handlePress = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
-    setState(initialState)
+    setState(initialState);
   };
-  if (!fontsLoaded && !fontError) {
-    return null;
-  }
+
   return (
-       <TouchableWithoutFeedback onPress={handlePress}>
-    <View style={styles.container}>
-      <ImageBackground
-        source={require("../../assets/image/PhotoBG.png")}
-        resizeMode="cover"
-        style={styles.image}
-      >
-        <View style={styles.wraper}>
+    <TouchableWithoutFeedback onPress={handlePress}>
+      <View style={styles.container}>
+        <ImageBackground
+          source={require("../../../assets/image/PhotoBG.png")}
+          resizeMode="cover"
+          style={styles.image}
+        >
+          <View style={styles.wraper}>
             <KeyboardAvoidingView
               behavior={Platform.OS === "ios" ? "padding" : "height"}
             >
-             <View style={[styles.header, {marginTop:33}]}>
+              <View style={[styles.header, { marginTop: 33 }]}>
                 <Text style={styles.headerTitle}>Увійти</Text>
               </View>
               <SafeAreaView>
@@ -92,27 +80,29 @@ useEffect(() => {
                   style={{
                     ...styles.form,
                     marginBottom: isShowKeyboard ? 182 : 132,
-                    
                   }}
                 >
-                  
                   <TextInput
                     style={[styles.input, { marginBottom: 16 }]}
-                    onChangeText={(value)=>setState((prevState)=>({...prevState, email:value}))}
+                    onChangeText={value =>
+                      setState(prevState => ({ ...prevState, email: value }))
+                    }
                     value={state.email}
                     placeholder="Адреса електронної пошти"
                     keyboardType="email-address"
                     onFocus={() => setIsShowKeyboard(true)}
                   />
-                  
+
                   <TextInput
-                    style={[styles.input, { marginBottom: 43}]}
+                    style={[styles.input, { marginBottom: 43 }]}
                     placeholder="Пароль"
                     keyboardType="default"
                     onFocus={() => setIsShowKeyboard(true)}
                     value={state.password}
-                    onChangeText={(value)=>setState((prevState)=>({...prevState, password:value}))}
-                    secureTextEntry = {true}
+                    onChangeText={value =>
+                      setState(prevState => ({ ...prevState, password: value }))
+                    }
+                    secureTextEntry={true}
                   />
                   <TouchableOpacity
                     activeOpacity={0.7}
@@ -121,14 +111,23 @@ useEffect(() => {
                   >
                     <Text style={styles.btnTitle}>Увійти</Text>
                   </TouchableOpacity>
-              <Text style={styles.linkTitle}>Немає акаунту? Зареєструватися</Text>
-                </View>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate("Registration")}
+                  >
+                    <Text style={styles.linkTitle}>
+                      Немає акаунту?
+                      <Text style={{ textDecorationLine: "underline" }}>
+                        Зареєструватися
+                      </Text>
+                    </Text>
+                  </TouchableOpacity>
+                  </View>
               </SafeAreaView>
             </KeyboardAvoidingView>
-        </View>
-      </ImageBackground>
-    </View>
-          </TouchableWithoutFeedback>
+          </View>
+        </ImageBackground>
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -157,10 +156,10 @@ const styles = StyleSheet.create({
     marginTop: -60,
     marginRight: "auto",
     marginLeft: "auto",
-    marginBottom:32,
+    marginBottom: 32,
   },
   headerTitle: {
-    fontFamily: 'Roboto-medium',
+    fontFamily: "Roboto-medium",
     fontSize: 30,
     fontWeight: 500,
   },
@@ -168,7 +167,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   input: {
-    fontFamily: 'Roboto-regular',
+    fontFamily: "Roboto-regular",
     height: 50,
     borderWidth: 1,
     padding: 16,
@@ -183,14 +182,14 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   btnTitle: {
-    fontFamily: 'Roboto-regular',
+    fontFamily: "Roboto-regular",
     color: "#ffffff",
     fontSize: 16,
   },
-  linkTitle:{
-    fontFamily: 'Roboto-regular',
+  linkTitle: {
+    fontFamily: "Roboto-regular",
     fontSize: 16,
-    color: '#1B4371',
-    textAlign:'center',
-  }
+    color: "#1B4371",
+    textAlign: "center",
+  },
 });

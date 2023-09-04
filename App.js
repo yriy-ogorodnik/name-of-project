@@ -1,12 +1,26 @@
+import { NavigationContainer } from "@react-navigation/native";
+import { useFonts } from "expo-font";
+import useRoute from "./router";
 
-
-import LoginScreen from "./src/Screens/LoginScreen";
-import RegistrationScreen from "./src/Screens/RegistrationScreen";
 
 export default function App() {
+  
+  const routing = useRoute(true)
+  // fonts______________________________
+   const [fontsLoaded, fontError] = useFonts({
+    'Inter-Black': require('./src/fonts/Inter-Black.ttf'),
+    'Roboto-regular': require('./src/fonts/Roboto-Regular.ttf'),
+    'Roboto-medium': require('./src/fonts/Roboto-Medium.ttf'),
+  });
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
+
   return (
-    // <RegistrationScreen/>
-    <LoginScreen></LoginScreen>
+    <NavigationContainer>
+     {routing}
+    </NavigationContainer>
+  
   );
 }
 

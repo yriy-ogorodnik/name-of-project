@@ -1,5 +1,5 @@
 import React, {  useEffect, useState } from "react";
-import { useFonts } from 'expo-font';
+
 
 import { Dimensions,
   ImageBackground,
@@ -16,6 +16,7 @@ import { Dimensions,
   Platform,
   Alert,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 const initialState = {
   login:'',
   email: '',
@@ -25,16 +26,12 @@ const windowDimensions = Dimensions.get('window').width;
 
 
 export default function RegistrationScreen() {
+const navigation = useNavigation()
 
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   console.log("RegistrationScreen  isShowKeyboard:", isShowKeyboard)
   const [state, setState] = useState(initialState);
-  // fonts______________________________
-  const [fontsLoaded, fontError] = useFonts({
-    'Inter-Black': require('../fonts/Inter-Black.ttf'),
-    'Roboto-regular': require('../fonts/Roboto-Regular.ttf'),
-    'Roboto-medium': require('../fonts/Roboto-Medium.ttf'),
-  });
+ 
  
   
 // ________________________
@@ -69,22 +66,20 @@ useEffect(() => {
     Keyboard.dismiss();
     setState(initialState)
   };
-  if (!fontsLoaded && !fontError) {
-    return null;
-  }
+  
   return (
        <TouchableWithoutFeedback onPress={handlePress}>
     <View style={styles.container}>
       <ImageBackground
-        source={require("../../assets/image/PhotoBG.png")}
+        source={require("../../../assets/image/PhotoBG.png")}
         resizeMode="cover"
         style={styles.image}
       >
         <View style={styles.wraper}>
             <KeyboardAvoidingView
-              behavior={Platform.OS === "ios" ? "padding" : "height"}
+              behavior={Platform.OS === "ios" ? "padding" : ""}
             >
-              <Image style={styles.avatarWrapper} source={require('../../assets/image/Add_photo.png')} />
+              <Image style={styles.avatarWrapper} source={require('../../../assets/image/Add_photo.png')} />
               <View style={styles.header}>
                 <Text style={styles.headerTitle}>Реєстрація</Text>
               </View>
@@ -131,7 +126,10 @@ useEffect(() => {
                   >
                     <Text style={styles.btnTitle}>Зареєстуватися</Text>
                   </TouchableOpacity>
-              <Text style={styles.linkTitle}>Вже є акаунт? Увійти</Text>
+                  <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+
+              <Text style={styles.linkTitle}  >Вже є акаунт? Увійти</Text>
+                  </TouchableOpacity>
                 </View>
               </SafeAreaView>
             </KeyboardAvoidingView>
